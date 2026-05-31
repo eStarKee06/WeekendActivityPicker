@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>Weekend Spin Wheel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>🎡 Weekend Wheel</h1>
+<p class="sub">Spin to decide your weekend!</p>
+
+<div class="top-bar">
+  <button class="tab-btn active" id="tabWheel">🎡 Spin</button>
+  <button class="tab-btn" id="tabEdit">✏️ Edit Lists</button>
+</div>
+
+<!-- ── Wheel View ── -->
+<div id="wheelView" class="show">
+  <div class="category-bar" id="catBar"></div>
+  <div class="category-dropdown">
+    <select id="catDropdown">
+      <option value="" disabled selected>Select a category…</option>
+    </select>
+  </div>
+
+  <!-- Single wheel -->
+  <div id="singleWheelLayout">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <canvas id="wheelMain"></canvas>
+    </div>
+    <button class="spin-btn" id="spinBtnMain" disabled style="margin-top:16px;">SPIN</button>
+    <div class="result-text" id="resultMain" style="margin-top:16px;"></div>
+  </div>
+
+  <!-- Dual wheel (Unjustified Splurge) -->
+  <div id="dualWheelLayout">
+    <div class="wheel-panel">
+      <h3>Should I splurge?</h3>
+      <div class="wheel-wrap">
+        <div class="pointer sm"></div>
+        <canvas id="wheelYesNo"></canvas>
+      </div>
+      <button class="spin-btn" id="spinBtnYesNo" style="padding:9px 28px;font-size:0.9rem;">SPIN</button>
+      <div class="result-text" id="resultYesNo"></div>
+      <div class="sub-hint" id="hintYesNo"></div>
+    </div>
+    <div class="wheel-panel">
+      <h3>What's the splurge?</h3>
+      <div class="wheel-wrap">
+        <div class="pointer sm"></div>
+        <canvas id="wheelSplurge"></canvas>
+      </div>
+      <button class="spin-btn" id="spinBtnSplurge" style="padding:9px 28px;font-size:0.9rem;" disabled>SPIN</button>
+      <div class="result-text" id="resultSplurge"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Edit View ── -->
+<div id="editView">
+  <div class="editor-header">
+    <select id="catSelect"></select>
+    <button class="icon-btn" id="btnAddCat">＋ Category</button>
+    <button class="icon-btn danger" id="btnDelCat">🗑</button>
+    <button class="icon-btn export" id="btnExport">⬇ Export</button>
+  </div>
+  <div class="items-list" id="itemsList"></div>
+  <div class="add-row">
+    <input type="text" id="newItemName" placeholder="New item name…" />
+    <input type="number" id="newItemWeight" value="1" min="0.1" step="0.1" />
+    <button id="btnAddItem">Add</button>
+  </div>
+  <p class="edit-note">Weight = relative chance. Higher weight = bigger slice.</p>
+</div>
+
+<!-- ── Modal ── -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3>New Category Name</h3>
+    <input type="text" id="newCatName" placeholder="e.g. Food & Drink" />
+    <div class="modal-btns">
+      <button class="btn-cancel" id="btnModalCancel">Cancel</button>
+      <button class="btn-confirm" id="btnModalConfirm">Create</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { init } from './app.js'; // data.js and storage.js are imported by app.js
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>

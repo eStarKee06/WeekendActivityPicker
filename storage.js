@@ -11,7 +11,7 @@ export function exportJS(categories, config) {
   lines.push('export const CATEGORIES = {');
   const catKeys = Object.keys(categories);
   catKeys.forEach((cat, ci) => {
-    lines.push(`  "${cat}": [`);
+    lines.push(`  "${cat}": [`);  // quoted key — required for keys with spaces/special chars
     categories[cat].forEach((item, ii) => {
       const comma = ii < categories[cat].length - 1 ? ',' : '';
       lines.push(`    { label: "${item.label}", weight: ${item.weight} }${comma}`);

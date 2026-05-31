@@ -5,13 +5,12 @@
  * Depends on: data.js, storage.js
  */
 
-import { CATEGORIES, CONFIG } from './data.js';
 import { exportJS } from './storage.js';
 
 // ── In-memory state ───────────────────────────────────────
 // Deep-clone defaults so edits don't mutate the imported constants
-let DATA       = JSON.parse(JSON.stringify(CATEGORIES));
-const CFG      = JSON.parse(JSON.stringify(CONFIG));
+let DATA = {};
+const CFG = {};
 
 let currentCat = null;
 const spinAngles = { main: 0, yesno: 0, splurge: 0 };
@@ -20,7 +19,12 @@ const DPR        = window.devicePixelRatio || 1;
 const canvases   = {};
 
 // ── Bootstrap ─────────────────────────────────────────────
-export function init() {
+export async function init() {
+  const res  = await fetch('./data.json');
+  const json = await res.json();
+  DATA = JSON.parse(JSON.stringify(json.categories));
+  Object.assign(CFG, json.config);
+
   initCanvases();
   rebuildCatBar();
   drawPlaceholder(canvases.main, 'Select a category');

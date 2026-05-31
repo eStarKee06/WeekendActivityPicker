@@ -5,24 +5,34 @@
  */
 
 export function exportJS(categories, config) {
-  const categoriesStr = JSON.stringify(categories, null, 2)
-    .replace(/"([^"]+)":/g, '$1:');  // "key": -> key: for JS style
+  const lines = [];
 
-  const paletteStr    = JSON.stringify(config.palette);
-  const splurgeStr    = JSON.stringify(config.splurgePalette);
+  // ── CATEGORIES ───────────────────────────────────────────
+  lines.push('export const CATEGORIES = {');
+  const catKeys = Object.keys(categories);
+  catKeys.forEach((cat, ci) => {
+    lines.push(`  "${cat}": [`);
+    categories[cat].forEach((item, ii) => {
+      const comma = ii < categories[cat].length - 1 ? ',' : '';
+      lines.push(`    { label: "${item.label}", weight: ${item.weight} }${comma}`);
+    });
+    const catComma = ci < catKeys.length - 1 ? ',' : '';
+    lines.push(`  ]${catComma}`);
+  });
+  lines.push('};');
+  lines.push('');
 
-  const contents = `export const CATEGORIES = ${categoriesStr};
+  // ── CONFIG ────────────────────────────────────────────────
+  lines.push('export const CONFIG = {');
+  lines.push(`  splurgeCategoryName: "${config.splurgeCategoryName}",`);
+  lines.push(`  splurgeYesWeight: ${config.splurgeYesWeight},`);
+  lines.push(`  splurgeNoWeight: ${config.splurgeNoWeight},`);
+  lines.push(`  palette: ${JSON.stringify(config.palette)},`);
+  lines.push(`  splurgePalette: ${JSON.stringify(config.splurgePalette)},`);
+  lines.push(`  narrowBreakpoint: ${config.narrowBreakpoint}`);
+  lines.push('};');
 
-export const CONFIG = {
-  splurgeCategoryName: "${config.splurgeCategoryName}",
-  splurgeYesWeight: ${config.splurgeYesWeight},
-  splurgeNoWeight: ${config.splurgeNoWeight},
-  palette: ${paletteStr},
-  splurgePalette: ${splurgeStr},
-  narrowBreakpoint: ${config.narrowBreakpoint}
-};
-`;
-
+  const contents = lines.join('\n');
   const blob = new Blob([contents], { type: 'text/javascript' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
